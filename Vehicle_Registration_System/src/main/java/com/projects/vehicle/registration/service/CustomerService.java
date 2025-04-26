@@ -1,0 +1,13 @@
+package com.projects.vehicle.registration.service;
+
+import java.util.List;
+
+import com.projects.vehicle.registration.dto.CustomerDTO;
+
+public interface CustomerService {
+    CustomerDTO addCustomer(CustomerDTO dto);
+    CustomerDTO getCustomerById(Long id);
+    List<CustomerDTO> getAllCustomers();
+    CustomerDTO updateCustomer(Long id, CustomerDTO dto);
+    void deleteCustomer(Long id);
+}
