@@ -1,5 +1,6 @@
 package com.projects.vehicle.registration.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,12 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return mapToDTO(customer);
+    }
+    
+    public CustomerDTO findCustomerByEmail(String email) {
+    	Customer customer = customerRepository.findByEmail(email)
+    			.orElseThrow(() -> new RuntimeException("Customer not found"));
         return mapToDTO(customer);
     }
 
@@ -83,6 +90,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private CustomerDTO mapToDTO(Customer c) {
+    	List<Long>regId=new ArrayList<>();
+    	if(c.getRegistrations()!=null)
+    		regId=c.getRegistrations().stream().map(r -> r.getId()).collect(Collectors.toList());
         return new CustomerDTO(
                 c.getId(),
                 c.getFirstName(),
@@ -94,8 +104,9 @@ public class CustomerServiceImpl implements CustomerService {
                 c.getCity(),
                 c.getState(),
                 c.getPinCode(),
-                c.getRegistrations().stream().map(r -> r.getId()).collect(Collectors.toList())
-
+                regId,
+                "",
+                ""
         );
     }
 }

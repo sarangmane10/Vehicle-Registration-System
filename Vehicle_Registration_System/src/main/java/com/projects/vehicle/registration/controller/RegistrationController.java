@@ -38,6 +38,7 @@ public class RegistrationController {
     // 3. Get all registrations
     @GetMapping
     public ResponseEntity<List<RegistrationDTO>> getAllRegistrations() {
+    	System.out.println("fsdfs");
         return ResponseEntity.ok(registrationService.getAllRegistrations());
     }
 }

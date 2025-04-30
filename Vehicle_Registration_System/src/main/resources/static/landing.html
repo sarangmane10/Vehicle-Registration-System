@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="vehicleApp">
+<head>
+</head>
+<body>
+<div>
+    <h1>Welcome to the Vehicle Registration System</h1>
+    <p>Register your vehicles securely and easily with our online portal. Start your journey with us now.</p>
+
+    <div class="button-group">
+        <button class="btn" ng-click="showLogin = true; showRegister = false">Login</button>
+        <button class="btn" ng-click="showRegister = true; showLogin = false">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <form ng-show="showLogin" ng-submit="loginUser()">
+        <h2>Login</h2>
+        <input type="email" ng-model="login.email" placeholder="Email" required />
+        <input type="password" ng-model="login.password" placeholder="Password" required />
+        <button class="btn" type="submit">Login</button>
+    </form>
+
+    <!-- Register Form -->
+    <form ng-show="showRegister" ng-submit="registerUser()">
+        <h2>Register</h2>
+        <input type="text" ng-model="register.firstName" placeholder="First Name" required />
+        <input type="email" ng-model="register.email" placeholder="Email" required />
+        <input type="password" ng-model="register.password" placeholder="Password" required />
+        <button class="btn" type="submit">Register</button>
+    </form>
+</div>
+</body>

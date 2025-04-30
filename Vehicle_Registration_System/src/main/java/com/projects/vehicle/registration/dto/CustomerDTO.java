@@ -3,13 +3,16 @@ package com.projects.vehicle.registration.dto;
 import java.util.List; 
 
 import jakarta.validation.constraints.Pattern;
-
+import jakarta.annotation.Generated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class CustomerDTO {
 
+	
     private Long id;
 
     @NotNull
@@ -47,6 +50,9 @@ public class CustomerDTO {
 
     private List<Long> registrationIds; // To represent related registrations
     
+    private String password;
+
+    private String userType;
     
     public CustomerDTO() {
 		super();
@@ -58,7 +64,8 @@ public class CustomerDTO {
 			@NotNull @Size(min = 1, max = 50) String lastName, @NotNull @Email @Size(max = 100) String email,
 			@NotNull @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits") String phoneNumber,
 			@NotNull @Size(max = 255) String address, @NotNull @Size(max = 50) String city,
-			@NotNull @Size(max = 50) String state, int pinCode, List<Long> registrationIds) {
+			@NotNull @Size(max = 50) String state, int pinCode, List<Long> registrationIds,
+			@NotNull @Size(min = 8)String password,String userType) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -71,6 +78,8 @@ public class CustomerDTO {
 		this.state = state;
 		this.pinCode = pinCode;
 		this.registrationIds = registrationIds;
+		this.password=password;
+		this.userType=userType;
 	}
 
 	// Getters and Setters
@@ -161,11 +170,36 @@ public class CustomerDTO {
     public void setRegistrationIds(List<Long> registrationIds) {
         this.registrationIds = registrationIds;
     }
+    
 
-    @Override
-    public String toString() {
-        return "CustomerDTO [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
-                + lastName + ", email=" + email + ", phoneNumber=" + phoneNumber + ", address=" + address + ", city="
-                + city + ", state=" + state + ", pinCode=" + pinCode + ", registrationIds=" + registrationIds + "]";
-    }
+    public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public String getUserType() {
+		return userType;
+	}
+
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+
+	@Override
+	public String toString() {
+		return "CustomerDTO [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
+				+ lastName + ", email=" + email + ", phoneNumber=" + phoneNumber + ", address=" + address + ", city="
+				+ city + ", state=" + state + ", pinCode=" + pinCode + ", registrationIds=" + registrationIds
+				+ ", password=" + password + ", userType=" + userType + "]";
+	}
+
+
+	
 }

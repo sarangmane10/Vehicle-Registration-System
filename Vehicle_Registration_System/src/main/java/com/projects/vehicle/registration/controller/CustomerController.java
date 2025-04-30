@@ -2,7 +2,9 @@ package com.projects.vehicle.registration.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,22 +13,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projects.vehicle.registration.dto.CustomerDTO;
+import com.projects.vehicle.registration.model.User;
+import com.projects.vehicle.registration.repository.UserRepository;
 import com.projects.vehicle.registration.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
 
+	@Autowired
     private final CustomerService customerService;
+    @Autowired
+    private final UserRepository userRepo;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+      
+    public CustomerController(CustomerService customerService, UserRepository userRepo) {
+		super();
+		this.customerService = customerService;
+		this.userRepo = userRepo;
+	}
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
-
-    // 1. Add new customer
+	// 1. Add new customer
     @PostMapping
     public ResponseEntity<CustomerDTO> addCustomer(@RequestBody CustomerDTO customerDTO) {
-        return ResponseEntity.ok(customerService.addCustomer(customerDTO));
+    	User user=new User(customerDTO.getEmail(),passwordEncoder.encode(customerDTO.getPassword()),customerDTO.getUserType());
+    	userRepo.save(user);
+    	CustomerDTO dto=customerService.addCustomer(customerDTO);
+    	dto.setUserType(user.getRoles());
+        return ResponseEntity.ok(dto);
     }
 
     // 2. Get all customers
