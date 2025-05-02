@@ -1,7 +1,9 @@
 package com.projects.vehicle.registration.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.projects.vehicle.registration.dto.CustomerDTO;
 import com.projects.vehicle.registration.model.Customer;
 import com.projects.vehicle.registration.repository.CustomerRepository;
+
+import jakarta.persistence.Tuple;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -88,6 +92,26 @@ public class CustomerServiceImpl implements CustomerService {
         }
         customerRepository.deleteById(id);
     }
+    
+    @Override
+    public List<Map<String, Object>> getCustomerRegistrationStats() {
+        List<Tuple> results = customerRepository.findCustomerRegistrationStats();
+        List<Map<String, Object>> customerStats = new ArrayList<>();
+        
+        for (Tuple tuple : results) {
+            Map<String, Object> customerData = new LinkedHashMap<>();
+            customerData.put("id", tuple.get("id", Long.class));
+            customerData.put("firstName", tuple.get("firstName", String.class));
+            customerData.put("lastName", tuple.get("lastName", String.class));
+            customerData.put("email", tuple.get("email", String.class));
+            customerData.put("phoneNumber", tuple.get("phoneNumber", String.class));
+            customerData.put("registrations", tuple.get("registrations", Long.class));
+            
+            customerStats.add(customerData);
+        }
+        
+        return customerStats;
+    }
 
     private CustomerDTO mapToDTO(Customer c) {
     	List<Long>regId=new ArrayList<>();
@@ -109,4 +133,5 @@ public class CustomerServiceImpl implements CustomerService {
                 ""
         );
     }
+    
 }

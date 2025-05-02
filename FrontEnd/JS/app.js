@@ -12,9 +12,17 @@
         templateUrl: "view/register.html",
         controller: "registerController",
       })
-      .when("/profile", {
-        templateUrl: "view/profile.html",
-        controller: "profileController",
+      .when("/customerHome", {
+        templateUrl: "view/customer/customerHome.html",
+        controller: "customerController",
+      })
+      .when("/adminHome", {
+        templateUrl: "view/admin/adminHome.html",
+        controller: "adminController",
+      })
+      .when("/customerHome/main", {
+        templateUrl: "view/customer/main.html",
+        controller: "adminProfileController",
       })
       .otherwise({ redirectTo: "/" });
   });

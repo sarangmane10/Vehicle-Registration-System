@@ -1,5 +1,7 @@
 package com.projects.vehicle.registration.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -16,7 +18,8 @@ public class VehicleDTO {
 
     @NotNull
     private int yearOfManufacture;
-
+   
+//	private MultipartFile image;
     private float power;
     private float mileage;
     
@@ -43,6 +46,7 @@ public class VehicleDTO {
 		this.fuelType = fuelType;
 		this.vehicleType = vehicleType;
 		this.registrationId = registrationId;
+//		this.image=image;
 	}
 
 
@@ -144,6 +148,15 @@ public class VehicleDTO {
     public void setRegistrationId(Long registrationId) {
         this.registrationId = registrationId;
     }
+    
+//    public MultipartFile getImage() {
+//		return image;
+//	}
+//
+//
+//	public void setImage(MultipartFile image) {
+//		this.image = image;
+//	}
 
     @Override
     public String toString() {

@@ -103,41 +103,17 @@ app.service("registerService", function ($http, $q) {
   };
 });
 
-// angular.module('vehicleApp')
-// .service('CustomerService', ['$http', 'AuthService', function($http, AuthService) {
-//   let cachedCustomer = null;
+app.service('adminService', ['$http','$q', function($http,$q) {
 
-//   // Get customer data (from cache or API)
-//   this.getCurrentCustomer = function() {
-//       return new Promise((resolve, reject) => {
-//           // 1. Check cache first
-//           if (cachedCustomer) {
-//               resolve(cachedCustomer);
-//               return;
-//           }
+    this.getCustomerStat=()=>{
+    return $http.get("http://localhost:8080/api/customers/customersRegitrationCount")
+    .then((response)=>{
+      console.log(response.data);
+      return response.data;
+    }).catch(function (error) {
+      alert(error);
+      return $q.reject(error + "error"); // Properly reject the promise
+    });
+}
 
-//           // 2. Check AuthService (login data)
-//           const authCustomer = AuthService.getCustomer();
-//           // console.log(authCustomer);
-//           if (authCustomer) {
-//               cachedCustomer = authCustomer;
-//               resolve(cachedCustomer);
-//               return;
-//           }
-
-//           // 3. Fallback to API call
-//           $http.get('/api/customers/')
-//               .then(response => {
-//                   cachedCustomer = response.data;
-//                   resolve(cachedCustomer);
-//               })
-//               .catch(reject);
-//       });
-//   };
-
-//   // Clear cache (e.g., on logout)
-//   this.clearCache = function() {
-//       cachedCustomer = null;
-//   };
-
-// }])
+}])
