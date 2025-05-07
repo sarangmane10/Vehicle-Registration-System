@@ -1,6 +1,6 @@
 package com.projects.vehicle.registration.dto;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,13 +8,13 @@ import jakarta.validation.constraints.Size;
 public class VehicleDTO {
 	private Long id;
 
-    @NotNull
-    @Size(min = 1, max = 15)
-    private String vehicleNumber; // e.g., MH12AB1234
+//    @NotNull
+//    @Size(min = 1, max = 15)
+//    private String vehicleNumber; // e.g., MH12AB1234
 
     private String model;
     private String brand;
-    private String color;
+    private List<String> colors;
 
     @NotNull
     private int yearOfManufacture;
@@ -23,34 +23,7 @@ public class VehicleDTO {
     private float power;
     private float mileage;
     
-    
-    public VehicleDTO() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-        
-	public VehicleDTO(Long id, @NotNull @Size(min = 1, max = 15) String vehicleNumber, String model, String brand,
-			String color, @NotNull int yearOfManufacture, float power, float mileage,
-			@NotNull @Size(max = 20) String fuelType, @NotNull @Size(max = 20) String vehicleType,
-			Long registrationId) {
-		super();
-		this.id = id;
-		this.vehicleNumber = vehicleNumber;
-		this.model = model;
-		this.brand = brand;
-		this.color = color;
-		this.yearOfManufacture = yearOfManufacture;
-		this.power = power;
-		this.mileage = mileage;
-		this.fuelType = fuelType;
-		this.vehicleType = vehicleType;
-		this.registrationId = registrationId;
-//		this.image=image;
-	}
-
-
-	@NotNull
+    @NotNull
     @Size(max = 20)
     private String fuelType; // e.g., Petrol, Diesel, Electric
 
@@ -58,7 +31,38 @@ public class VehicleDTO {
     @Size(max = 20)
     private String vehicleType; // e.g., Car, Bike, Truck
 
-    private Long registrationId; // To represent related registration, instead of embedding full Registration object
+    private List<Long> registrationId; // To represent related registration, instead of embedding full Registration object
+    private String engineType;
+    private String transmission;
+    
+    
+    public VehicleDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+        
+	public VehicleDTO(Long id, String model, String brand,
+			List<String> colors, @NotNull int yearOfManufacture, float power, float mileage,
+			@NotNull @Size(max = 20) String fuelType, @NotNull @Size(max = 20) String vehicleType,
+			List<Long> registrationId,String engineType,
+			String transmission) {
+		super();
+		this.id = id;
+//		this.vehicleNumber = vehicleNumber;
+		this.model = model;
+		this.brand = brand;
+		this.colors = colors;
+		this.yearOfManufacture = yearOfManufacture;
+		this.power = power;
+		this.mileage = mileage;
+		this.fuelType = fuelType;
+		this.vehicleType = vehicleType;
+		this.registrationId = registrationId;
+//		this.image=image;
+		this.engineType=engineType;
+		this.transmission=transmission;
+	}
 
     // Getters and Setters
     public Long getId() {
@@ -69,13 +73,13 @@ public class VehicleDTO {
         this.id = id;
     }
 
-    public String getVehicleNumber() {
-        return vehicleNumber;
-    }
-
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
-    }
+//    public String getVehicleNumber() {
+//        return vehicleNumber;
+//    }
+//
+//    public void setVehicleNumber(String vehicleNumber) {
+//        this.vehicleNumber = vehicleNumber;
+//    }
 
     public String getModel() {
         return model;
@@ -93,12 +97,12 @@ public class VehicleDTO {
         this.brand = brand;
     }
 
-    public String getColor() {
-        return color;
+    public List<String> getColors() {
+        return colors;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColors(List<String> colors) {
+        this.colors = colors;
     }
 
     public int getYearOfManufacture() {
@@ -141,11 +145,11 @@ public class VehicleDTO {
         this.vehicleType = vehicleType;
     }
 
-    public Long getRegistrationId() {
+    public List<Long> getRegistrationId() {
         return registrationId;
     }
 
-    public void setRegistrationId(Long registrationId) {
+    public void setRegistrationId(List<Long> registrationId) {
         this.registrationId = registrationId;
     }
     
@@ -157,12 +161,33 @@ public class VehicleDTO {
 //	public void setImage(MultipartFile image) {
 //		this.image = image;
 //	}
+    
+    public String getEngineType() {
+		return engineType;
+	}
+
+
+	public void setEngineType(String engineType) {
+		this.engineType = engineType;
+	}
+
+
+	public String getTransmission() {
+		return transmission;
+	}
+
+
+	public void setTransmission(String transmission) {
+		this.transmission = transmission;
+	}
+    
 
     @Override
     public String toString() {
-        return "VehicleDTO [id=" + id + ", vehicleNumber=" + vehicleNumber + ", model=" + model + ", brand=" + brand
-                + ", color=" + color + ", yearOfManufacture=" + yearOfManufacture + ", power=" + power + ", mileage="
+        return "VehicleDTO [id=" + id + ", vehicleNumber="  + ", model=" + model + ", brand=" + brand
+                + ", color=" + colors + ", yearOfManufacture=" + yearOfManufacture + ", power=" + power + ", mileage="
                 + mileage + ", fuelType=" + fuelType + ", vehicleType=" + vehicleType + ", registrationId="
                 + registrationId + "]";
     }
+
 }

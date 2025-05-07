@@ -1,6 +1,7 @@
 package com.projects.vehicle.registration.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import com.projects.vehicle.registration.repository.CustomerRepository;
 import com.projects.vehicle.registration.repository.RegistrationRepository;
 import com.projects.vehicle.registration.repository.VehicleRepository;
 
+import jakarta.persistence.Tuple;
+
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -26,6 +29,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    CommonTransformMethodsImpls commonTransformMethods;
 
     @Override
     public RegistrationDTO registerVehicle(RegistrationDTO dto) {
@@ -42,7 +47,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 dto.getRegistrationDate(),
                 dto.getExpiryDate(),
                 dto.getRegistrationLocation(),
-                dto.isActive()
+                dto.getStatus()
         );
 
         Registration saved = registrationRepository.save(registration);
@@ -83,7 +88,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 dto.getRegistrationDate(),
                 dto.getExpiryDate(),
                 dto.getRegistrationLocation(),
-                dto.isActive()
+                dto.getStatus()
         );
 
         return mapToDTO(registrationRepository.save(updated));
@@ -96,6 +101,26 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         registrationRepository.deleteById(id);
     }
+    
+    @Override
+	public List<Map<String,Object>> getRegistrationDetails() {
+    	List<Tuple>records= registrationRepository.getRegistrationDetails();
+    	
+    	return commonTransformMethods.transformResultToMap(records);
+	}
+    
+    @Override
+    public int aproveActon(Long id,String message) {
+    	return registrationRepository.approveAction(id,message);
+    }
+    
+    @Override
+	public List<RegistrationDTO> getRegistrationByCustomerId(Long id) {
+		// TODO Auto-generated method stub
+		return registrationRepository.findByCustomerId(id).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+	}
 
     private RegistrationDTO mapToDTO(Registration reg) {
         return new RegistrationDTO(
@@ -105,7 +130,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                 reg.getRegistrationDate(),
                 reg.getExpiryDate(),
                 reg.getRegistrationLocation(),
-                reg.isActive()
+                reg.getStatus()
         );
     }
+
 }

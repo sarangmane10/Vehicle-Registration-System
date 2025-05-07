@@ -26,7 +26,7 @@ public class RegistrationDTO {
     @Size(max = 50)
     private String registrationLocation;
 
-    private boolean active;
+    private String status;
     
     
 
@@ -37,7 +37,7 @@ public class RegistrationDTO {
 
 	public RegistrationDTO(Long id, @NotNull Long vehicleId, @NotNull Long customerId,
 			@NotNull LocalDate registrationDate, LocalDate expiryDate,
-			@NotNull @Size(max = 50) String registrationLocation, boolean active) {
+			@NotNull @Size(max = 50) String registrationLocation, String status) {
 		super();
 		this.id = id;
 		this.vehicleId = vehicleId;
@@ -45,7 +45,7 @@ public class RegistrationDTO {
 		this.registrationDate = registrationDate;
 		this.expiryDate = expiryDate;
 		this.registrationLocation = registrationLocation;
-		this.active = active;
+		this.status = status;
 	}
 
 	// Getters and Setters
@@ -97,18 +97,18 @@ public class RegistrationDTO {
         this.registrationLocation = registrationLocation;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "RegistrationDTO [id=" + id + ", vehicleId=" + vehicleId + ", customerId=" + customerId
                 + ", registrationDate=" + registrationDate + ", expiryDate=" + expiryDate + ", registrationLocation="
-                + registrationLocation + ", active=" + active + "]";
+                + registrationLocation + ", active=" + status + "]";
     }
 }

@@ -15,7 +15,7 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Vehicle vehicle;
 
     @ManyToOne
@@ -24,13 +24,13 @@ public class Registration {
     private LocalDate registrationDate;
     private LocalDate expiryDate;
     private String registrationLocation;
-    private boolean active;
+    private String status;
 	public Registration() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Registration(Long id, Vehicle vehicle, Customer customer, LocalDate registrationDate, LocalDate expiryDate,
-			String registrationLocation, boolean active) {
+			String registrationLocation, String status) {
 		super();
 		this.id = id;
 		this.vehicle = vehicle;
@@ -38,7 +38,7 @@ public class Registration {
 		this.registrationDate = registrationDate;
 		this.expiryDate = expiryDate;
 		this.registrationLocation = registrationLocation;
-		this.active = active;
+		this.status = status;
 	}
 	
 	public Long getId() {
@@ -77,18 +77,20 @@ public class Registration {
 	public void setRegistrationLocation(String registrationLocation) {
 		this.registrationLocation = registrationLocation;
 	}
-	public boolean isActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+
+	public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 	
 	@Override
 	public String toString() {
 		return "Registration [id=" + id + ", vehicle=" + vehicle + ", customer=" + customer + ", registrationDate="
 				+ registrationDate + ", expiryDate=" + expiryDate + ", registrationLocation=" + registrationLocation
-				+ ", active=" + active + "]";
+				+ ", active=" + status + "]";
 	}
 	
 

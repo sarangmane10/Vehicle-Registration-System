@@ -7,7 +7,7 @@ import com.projects.vehicle.registration.dto.VehicleDTO;
 public interface VehicleService {
     VehicleDTO addVehicle(VehicleDTO dto);
     VehicleDTO getVehicleById(Long id);
-    VehicleDTO getByVehicleNumber(String number);
+//    VehicleDTO getByVehicleNumber(String number);
     List<VehicleDTO> getAllVehicles();
     VehicleDTO updateVehicle(Long id, VehicleDTO dto);
     void deleteVehicle(Long id);

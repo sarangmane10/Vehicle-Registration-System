@@ -44,8 +44,8 @@ public class VehicleController {
     }
 
     // 4. Get vehicle by number
-    @GetMapping("/search")
-    public ResponseEntity<VehicleDTO> getByVehicleNumber(@RequestParam String number) {
-        return ResponseEntity.ok(vehicleService.getByVehicleNumber(number));
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<VehicleDTO> getByVehicleNumber(@RequestParam String number) {
+//        return ResponseEntity.ok(vehicleService.getByVehicleNumber(number));
+//    }
 }

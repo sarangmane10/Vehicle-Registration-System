@@ -389,11 +389,11 @@
           <i class="fas fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </div>
-        <div class="menu-item" ng-class="{active: currentView === 'vehicles'}" ng-click="setView('vehicles')">
+        <div class="menu-item" ng-class="{active: currentView === 'vehicles'}" ng-click="setView('vehicles');getMyRegistrations()">
           <i class="fas fa-car"></i>
           <span>My Vehicles</span>
         </div>
-        <div class="menu-item" ng-class="{active: currentView === 'register'}" ng-click="setView('register'); resetRegistrationForm()">
+        <div class="menu-item" ng-class="{active: currentView === 'register'}" ng-click="setView('register'); resetRegistrationForm();getAllVehicle()">
           <i class="fas fa-plus-circle"></i>
           <span>Register Vehicle</span>
         </div>
@@ -475,7 +475,7 @@
         <div class="content-section">
           <div class="section-header">
             <h2><i class="fas fa-car"></i> My Vehicles</h2>
-            <button class="action-btn" ng-click="setView('register'); resetRegistrationForm()">
+            <button class="action-btn" ng-click="setView('register'); resetRegistrationForm();getAllVehicle()">
               <i class="fas fa-plus"></i> Add Vehicle
             </button>
           </div>
@@ -485,16 +485,24 @@
               <tr>
                 <th>Vehicle</th>
                 <th>Type</th>
-                <th>Registration No.</th>
+                <th>Power (CC)</th>
+                <th>mileage (kmpl)</th>
+                <th>Engine Type</th>
+                <th>Transmission</th>
+                <th>Registration ID</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="vehicle in vehicles">
-                <td>{{vehicle.make}} {{vehicle.model}} ({{vehicle.year}})</td>
-                <td>{{vehicle.type}}</td>
-                <td>{{vehicle.registrationNumber}}</td>
+                <td>{{vehicle.brand}} {{vehicle.model}} ({{vehicle.yearOfManufacture}})</td>
+                <td>{{vehicle.vehicleType}}</td>
+                <td>{{vehicle.power}}</td>
+                <td>{{vehicle.mileage}}</td>
+                <td>{{vehicle.engineType}}</td>
+                <td>{{vehicle.transmission}}</td>
+                <td>{{vehicle.id}}</td>
                 <td>
                   <span ng-class="{
                     'status status-approved': vehicle.status === 'APPROVED',
@@ -542,10 +550,11 @@
               <div class="vehicle-grid">
                 <div class="vehicle-card" ng-repeat="vehicle in availableVehicles | filter:vehicleSearch" 
                      ng-click="selectVehicle(vehicle)">
-                  <img ng-src="{{vehicle.image}}" alt="{{vehicle.make}} {{vehicle.model}}">
-                  <h3>{{vehicle.make}} {{vehicle.model}}</h3>
-                  <p>{{vehicle.year}} • {{vehicle.type}}</p>
-                  <p>{{vehicle.engineType}} • {{vehicle.transmission}}</p>
+                  <img ng-src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSul4OfMzakDPTpB2Ms7OTKu-6efsyoYHLLrA&s" alt="{{vehicle.make}} {{vehicle.model}}">
+                  <h3>{{vehicle.brand}} {{vehicle.model}}</h3>
+                  <p>{{vehicle.yearOfManufacture}} • {{vehicle.vehicleType}}</p>
+                  <p>{{vehicle.power}}cc • {{vehicle.mileage}}kmpl</p>
+                  <!-- <p>{{vehicle.engineType}} • {{vehicle.transmission}}</p> -->
                   <button class="btn register-btn" style="margin-top: 10px;">
                     <i class="fas fa-check"></i> Select
                   </button>
@@ -562,26 +571,37 @@
             <!-- Step 2: Registration Form -->
             <div ng-if="registrationStep === 2">
               <form ng-submit="registerVehicle()">
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label>Vehicle Registration Number</label>
                   <input type="text" ng-model="vehicleForm.registrationNumber" required>
-                </div>
+                </div> -->
                 
                 <div style="display: flex; gap: 15px;">
                   <div class="form-group" style="flex: 1;">
                     <label>Make/Brand</label>
-                    <input type="text" ng-model="vehicleForm.make" required>
+                    <input type="text" ng-model="vehicleForm.brand" disabled required>
                   </div>
                   <div class="form-group" style="flex: 1;">
                     <label>Model</label>
-                    <input type="text" ng-model="vehicleForm.model" required>
+                    <input type="text" ng-model="vehicleForm.model" disabled required>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                  <div class="form-group" style="flex: 1;">
+                    <label>Transmission</label>
+                    <input type="text" ng-model="vehicleForm.transmission" disabled required>
+                  </div>
+                  <div class="form-group" style="flex: 1;">
+                    <label>Engine Type</label>
+                    <input type="text" ng-model="vehicleForm.engineType" disabled required>
                   </div>
                 </div>
                 
                 <div style="display: flex; gap: 15px;">
                   <div class="form-group" style="flex: 1;">
                     <label>Vehicle Type</label>
-                    <select ng-model="vehicleForm.type" required>
+                    <select ng-model="vehicleForm.vehicleType" disabled required>
                       <option value="">Select Type</option>
                       <option value="Sedan">Sedan</option>
                       <option value="SUV">SUV</option>
@@ -591,13 +611,19 @@
                   </div>
                   <div class="form-group" style="flex: 1;">
                     <label>Year</label>
-                    <input type="number" ng-model="vehicleForm.year" min="1900" max="{{currentYear}}" required>
+                    <input type="number" ng-model="vehicleForm.yearOfManufacture" min="1900" max="{{currentYear}}" disabled required>
                   </div>
                 </div>
-                
+                <div class="form-group" style="flex: 1;">
+                  <label>Place </label>
+                  <input type="text" ng-model="vehicleForm.place"  required>
+                </div>
                 <div class="form-group">
                   <label>Color</label>
-                  <input type="text" ng-model="vehicleForm.color" required>
+                  <!-- <input type="text" ng-model="vehicleForm.color" required> -->
+                  <select
+                  ng-model="vehicleForm.color"
+                  ng-options="color for color in vehicleForm.colors">{{color}}</select>
                 </div>
                 
                 <div class="form-actions">

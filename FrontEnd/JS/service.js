@@ -108,12 +108,126 @@ app.service('adminService', ['$http','$q', function($http,$q) {
     this.getCustomerStat=()=>{
     return $http.get("http://localhost:8080/api/customers/customersRegitrationCount")
     .then((response)=>{
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     }).catch(function (error) {
       alert(error);
       return $q.reject(error + "error"); // Properly reject the promise
     });
 }
+
+
+this.getRegistrationStat=()=>{
+  return $http.get("http://localhost:8080/api/registrations/details")
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.getVehicleDetails=()=>{
+  return $http.get("http://localhost:8080/api/vehicles")
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.getVehicleDetailsById=(id)=>{
+  return $http.get("http://localhost:8080/api/vehicles/"+id)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.addVehicle=(data)=>{
+  return $http.post("http://localhost:8080/api/vehicles",data)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.getCustomerById=(id)=>{
+  return $http.get("http://localhost:8080/api/customers/"+id)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.getRegistrationById=(id)=>{
+  return $http.get("http://localhost:8080/api/registrations/"+id)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.getCustomerByEmail=(email)=>{
+  return $http.get("http://localhost:8080/api/customers/byMail?email="+email)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+
+this.takeAction=(id,message)=>{
+  return $http.post("http://localhost:8080/api/registrations/action/"+id+"?message="+message)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
+}])
+
+
+
+app.service('customerService', ['$http','$q', function($http,$q) {
+
+  this.registerVehicle=(data)=>{
+    return $http.post("http://localhost:8080/api/registrations",data)
+    .then((response)=>{
+      return response.data;
+    }).catch(()=>{
+      alert(error);
+      return $q.reject(error + "error");
+    })
+  }
+
+  this.getAllRegistrations=(customerId)=>{
+    return $http.get("http://localhost:8080/api/registrations/byCustomerId/"+customerId)
+    .then((response)=>{
+      return response.data;
+    }).catch(()=>{
+      alert(error);
+      return $q.reject(error + "error");
+    })
+  }
 
 }])
