@@ -1,19 +1,13 @@
 package com.projects.vehicle.registration.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class StartController {
-	
-//	@Controller
-//	public class FrontendController {
-//
-//	    @RequestMapping(value = { "/", "/profile", "/register", "/login" })
-//	    public String index() {
-//	        return "forward:/index.html";
-//	    }
-//	}
 
-
+	@GetMapping("/")
+	public String index() {
+		return "Hello";
+	}
 }
