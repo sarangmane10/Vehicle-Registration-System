@@ -20,10 +20,6 @@
         templateUrl: "view/admin/adminHome.html",
         controller: "adminController",
       })
-      .when("/customerHome/main", {
-        templateUrl: "view/customer/main.html",
-        controller: "adminProfileController",
-      })
       .otherwise({ redirectTo: "/" });
   });
   

@@ -204,6 +204,17 @@ this.takeAction=(id,message)=>{
     return $q.reject(error + "error"); // Properly reject the promise
   });
 }
+
+this.editVehicle=(data)=>{
+  return $http.post("http://localhost:8080/api/vehicles/edit",data)
+  .then((response)=>{
+    // console.log(response.data);
+    return response.data;
+  }).catch(function (error) {
+    alert(error);
+    return $q.reject(error + "error"); // Properly reject the promise
+  });
+}
 }])
 
 
@@ -222,6 +233,16 @@ app.service('customerService', ['$http','$q', function($http,$q) {
 
   this.getAllRegistrations=(customerId)=>{
     return $http.get("http://localhost:8080/api/registrations/byCustomerId/"+customerId)
+    .then((response)=>{
+      return response.data;
+    }).catch(()=>{
+      alert(error);
+      return $q.reject(error + "error");
+    })
+  }
+
+  this.updateCustomer=(customer)=>{
+    return $http.post("http://localhost:8080/api/customers/update",customer)
     .then((response)=>{
       return response.data;
     }).catch(()=>{

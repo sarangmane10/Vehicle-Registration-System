@@ -68,4 +68,17 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> getCustomerByEmail(@RequestParam String email) {
         return ResponseEntity.ok(customerService.findCustomerByEmail(email));
     }
+    
+    @PostMapping("/update")
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO) {
+//    	User user=new User(customerDTO.getEmail(),passwordEncoder.encode(customerDTO.getPassword()),customerDTO.getUserType());
+//    	userRepo.save(user);
+    	if(customerDTO.getPassword()!="" && customerDTO.getPassword()!=null) {
+    		User user=userRepo.findByEmail(customerDTO.getEmail()).get();
+    		user.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
+    		userRepo.save(user);
+    	}
+    	CustomerDTO dto=customerService.updateCustomer(customerDTO);
+        return ResponseEntity.ok(dto);
+    }
 }

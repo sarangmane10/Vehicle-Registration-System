@@ -42,10 +42,16 @@ public class VehicleController {
     public ResponseEntity<VehicleDTO> getVehicleById(@PathVariable Long id) {
         return ResponseEntity.ok(vehicleService.getVehicleById(id));
     }
-
+    
     // 4. Get vehicle by number
 //    @GetMapping("/search")
 //    public ResponseEntity<VehicleDTO> getByVehicleNumber(@RequestParam String number) {
 //        return ResponseEntity.ok(vehicleService.getByVehicleNumber(number));
 //    }
+    
+    @PostMapping("/edit")
+    public ResponseEntity<VehicleDTO> editVehicle(@RequestBody VehicleDTO vehicleDTO) {
+        VehicleDTO savedVehicle = vehicleService.editVehicle(vehicleDTO);
+        return ResponseEntity.ok(savedVehicle);
+    }
 }

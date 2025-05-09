@@ -51,14 +51,14 @@ public class AuthenticationController {
             
             // 3. Prepare success response based on role
             response.put("status", "success");
-            
+            CustomerDTO customer = customerService.findCustomerByEmail(user.getEmail());
             if ("USER".equals(user.getRoles())) {
-                CustomerDTO customer = customerService.findCustomerByEmail(user.getEmail());
                 response.put("message", "Welcome Customer: " + customer.getFirstName());
                 response.put("user", customer);
                 response.put("role", "USER");
             } else if ("ADMIN".equals(user.getRoles())) {
                 response.put("message", "Welcome Admin");
+                response.put("user", customer);
                 response.put("role", "ADMIN");
             } else {
                 response.put("message", "Unknown user type");

@@ -35,6 +35,9 @@ public class Vehicle {
     private String vehicleType; // e.g., Car, Bike, Truck
     private String engineType;
     private String transmission;
+    private String image;
+    private Long price;
+    private String status;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     private List<Registration> registration;
@@ -46,7 +49,7 @@ public class Vehicle {
 
 	public Vehicle(Long id, String model, String brand, List<String> colors, int yearOfManufacture,
 			float power, float mileage, String fuelType, String vehicleType, List<Registration> registration,String engineType,
-     String transmission) {
+     String transmission,String image,Long price,String status) {
 		super();
 		this.id = id;
 //		this.vehicleNumber = vehicleNumber;
@@ -61,6 +64,9 @@ public class Vehicle {
 		this.registration = registration;
 		this.engineType=engineType;
 		this.transmission=transmission;
+		this.image=image;
+		this.price=price;
+		this.status=status;
 	}
 
 	public Long getId() {
@@ -164,10 +170,34 @@ public class Vehicle {
 		this.colors = colors;
 	}
 	
-	
-
 	public List<String> getColors() {
 		return colors;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+
+	public Long getPrice() {
+		return price;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
+	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override

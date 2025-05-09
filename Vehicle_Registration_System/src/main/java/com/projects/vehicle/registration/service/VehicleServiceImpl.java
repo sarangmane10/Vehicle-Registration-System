@@ -1,13 +1,12 @@
 package com.projects.vehicle.registration.service;
 
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projects.vehicle.registration.dto.VehicleDTO;
-import com.projects.vehicle.registration.model.Registration;
 import com.projects.vehicle.registration.model.Vehicle;
 import com.projects.vehicle.registration.repository.VehicleRepository;
 
@@ -39,7 +38,10 @@ public class VehicleServiceImpl implements VehicleService {
                 dto.getVehicleType(),
                 null, // registration will be handled separately
                 dto.getEngineType(),
-                dto.getTransmission()
+                dto.getTransmission(),
+                dto.getImage(),
+                dto.getPrice(),
+                dto.getStatus()
         );
 
         Vehicle saved = vehicleRepository.save(vehicle);
@@ -82,7 +84,10 @@ public class VehicleServiceImpl implements VehicleService {
                 dto.getVehicleType(),
                 existing.getRegistration(), // keep existing registration
                 dto.getEngineType(),
-                dto.getTransmission()
+                dto.getTransmission(),
+                dto.getImage(),
+                dto.getPrice(),
+                dto.getStatus()
         );
 
         Vehicle saved = vehicleRepository.save(updated);
@@ -96,6 +101,34 @@ public class VehicleServiceImpl implements VehicleService {
         }
         vehicleRepository.deleteById(id);
     }
+    
+    @Override
+	public VehicleDTO editVehicle(VehicleDTO vehicle) {
+//    	System.out.println("hello");
+		Vehicle v=vehicleRepository.findById(vehicle.getId()).get();
+	    v.setModel(vehicle.getModel());
+	    v.setBrand(vehicle.getBrand());
+	    
+	    // For list fields, create a new ArrayList to avoid reference sharing
+	    if (vehicle.getColors() != null) {
+	        v.setColors(new ArrayList<>(vehicle.getColors()));
+	    } else {
+	        v.setColors(null);
+	    }
+	    
+	    v.setYearOfManufacture(vehicle.getYearOfManufacture());
+	    v.setPower(vehicle.getPower());
+	    v.setMileage(vehicle.getMileage());
+	    v.setFuelType(vehicle.getFuelType());
+	    v.setVehicleType(vehicle.getVehicleType());
+	    
+	    v.setEngineType(vehicle.getEngineType());
+	    v.setTransmission(vehicle.getTransmission());
+	    v.setImage(vehicle.getImage());
+	    v.setPrice(vehicle.getPrice());
+	    v.setStatus(vehicle.getStatus());
+	    return mapToDTO(vehicleRepository.save(v));
+	}
 
     private VehicleDTO mapToDTO(Vehicle v) {
     	List<Long> id=null;
@@ -116,7 +149,10 @@ public class VehicleServiceImpl implements VehicleService {
                 v.getVehicleType(),
                 id,
                 v.getEngineType(),
-                v.getTransmission()
+                v.getTransmission(),
+                v.getImage(),
+                v.getPrice(),
+                v.getStatus()
         );
     }
 

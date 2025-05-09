@@ -23,6 +23,9 @@ app.controller(
         .registerCustomer($scope.customerData)
         .then(function (response) {
           alert("Registration successful!");
+          if(loginService.getRole()=="ADMIN"){
+            $location.path("/adminHome");
+          }
           $location.path("/login");
         })
         .catch(function (error) {
@@ -135,7 +138,7 @@ app.controller("customerController", [
         adminService
           .getVehicleDetails()
           .then((response) => {
-            $scope.availableVehicles = response;
+            $scope.availableVehicles = response.filter(res=>res.status==="Available");
           })
           .then(() => {
             console.log($scope.availableVehicles);
@@ -162,8 +165,9 @@ app.controller("customerController", [
       // Vehicle selection functions
       $scope.selectVehicle = function (vehicle) {
         $scope.vehicleForm = vehicle;
-        console.log($scope.vehicleForm);
         $scope.registrationStep = 2;
+        // console.log($scope.vehicleForm);
+
       };
 
       // $scope.showCustomVehicleForm = function () {
@@ -186,12 +190,16 @@ app.controller("customerController", [
       // (customer data, vehicles array, dashboard stats, etc.)
 
       // Sample customer data
-      $scope.customer = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        phone: "(123) 456-7890",
-        address: "123 Main Street, City, Country",
-      };
+      $scope.setProfile=()=>{
+        $scope.customer = loginService.getCustomer();
+      }
+      
+
+      $scope.showVehicleDetails=(view,vehicle)=>{
+        $scope.setView(view);
+        $scope.newVehicle=vehicle;
+        console.log(vehicle);
+      }
 
 
       //get all registered Vehicles details
@@ -222,6 +230,8 @@ app.controller("customerController", [
                     vehicleType: vehicle.vehicleType,
                     engineType: vehicle.engineType,
                     transmission: vehicle.transmission,
+                    price:vehicle.price,
+                    // place:vehicle.registrationLocation
                   };
                 });
             });
@@ -240,6 +250,15 @@ app.controller("customerController", [
             alert("Error Occurred. Please Check Console");
           });
       };
+
+      $scope.editVehicle=(vehicle)=>{
+        // console.log(vehicle);
+        // vehicle.place=vehicle.registrationLocation;
+        // delete vehicle.registrationLocation;
+        // alert(JSON.stringify(vehicle));
+        // $scope.setView('register');
+        //  $scope.selectVehicle(vehicle);
+      }
       
       // Dashboard statistics
       $scope.getMyRegistrations();
@@ -294,12 +313,33 @@ app.controller("customerController", [
           });
       };
 
-      // Profile actions
+      //Customer Profile actions
       $scope.updateProfile = function () {
-        alert(
-          "Profile updated successfully!\n" +
-            JSON.stringify($scope.customer, null, 2)
-        );
+        if($scope.customer.password===undefined){
+          $scope.customer.password="";
+        }
+        if($scope.customer.confirmPassword===undefined){
+          $scope.customer.confirmPassword="";
+        }
+        if($scope.customer.password!==$scope.customer.confirmPassword){
+          alert("Password don't match");
+          console.log($scope.customer.password);
+          console.log($scope.customer.confirmPassword);
+        }else{
+          delete $scope.customer.confirmPassword;
+          delete $scope.customer.id;
+          // $scope.customer.id=Number($scope.customer.id);
+          console.log($scope.customer);
+          customerService.updateCustomer($scope.customer)
+          .then((response)=>{
+            alert("Details Updated Successfully");
+            loginService.setCustomer(response,loginService.getRole());
+          }).catch((error)=>{
+            console.log(error);
+            alert("Error Occured. Please Check Log");
+          })
+        }
+        
       };
 
       // Logout
@@ -321,7 +361,8 @@ app.controller("adminController", [
   "adminService",
   "$location",
   "loginService",
-  function ($scope, adminService, $location, loginService) {
+  "customerService",
+  function ($scope, adminService, $location, loginService,customerService) {
     if (loginService.getRole() === "ADMIN") {
       $scope.currentView = "customers";
       $scope.showModal = false;
@@ -332,6 +373,7 @@ app.controller("adminController", [
       adminService.getCustomerStat()
         .then((response) => {
           $scope.customers = response;
+          console.log(response);
         }).catch((error) => {
           console.log(error);
           alert("Error Occured. Please Check Log");
@@ -419,41 +461,73 @@ app.controller("adminController", [
       };
 
       // Modal functions
-      $scope.showAddVehicleModal = function () {
+      $scope.action="Add";
+      $scope.showAddVehicleModal = function (action) {
         $scope.showModal = true;
+        if(action!=="edit"){
+          $scope.newVehicle = {};
+          $scope.action="Add";
+        }else{
+          $scope.action="Edit";
+        }
       };
 
       $scope.closeModal = function () {
         $scope.showModal = false;
         $scope.newVehicle = {};
+        $scope.getAllVehicle();
       };
 
       // Vehicle functions
       $scope.addVehicle = function () {
         $scope.newVehicle.colors = $scope.newVehicle.color.split(" ");
         delete $scope.newVehicle.color;
-        console.log($scope.newVehicle);
-        adminService
-          .addVehicle($scope.newVehicle)
-          .then((response) => {
-            alert("Vehicle Added Successfully");
-          })
-          .then(() => {
-            $scope.getAllVehicle();
-          })
-          .catch((error) => {
-            console.log(error);
-            alert("Error Occured. Please Check Log");
-          });
+        // console.log($scope.newVehicle);
+        if($scope.action==='Add'){
+          adminService.addVehicle($scope.newVehicle)
+            .then((response) => {
+              alert("Vehicle Added Successfully");
+            })
+            .then(() => {
+              $scope.getAllVehicle();
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Error Occured. Please Check Log");
+            });
+        }else{
+          // alert($scope.newVehicle.id);
+          adminService.editVehicle($scope.newVehicle)
+            .then((response) => {
+              alert("Vehicle Edited Successfully");
+            })
+            .then(() => {
+              $scope.getAllVehicle();
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Error Occured. Please Check Log");
+            });
+        }
         $scope.closeModal();
       };
 
-      $scope.viewVehicle = function (id) {
-        alert("Viewing vehicle: " + id);
+      $scope.viewVehicle = function (vehicle,view) {
+        $scope.setView(view);
+        $scope.newVehicle=vehicle;
       };
 
-      $scope.editVehicle = function (id) {
-        alert("Editing vehicle: " + id);
+      $scope.editVehicle = function (vehicle) {
+        $scope.newVehicle=vehicle;
+        let colors="";
+        vehicle.colors.map(color=>{
+          colors=colors+" "+color;
+        })
+        delete $scope.newVehicle.colors;
+        $scope.newVehicle.color=colors;
+        // console.log($scope.newVehicle);
+        $scope.showAddVehicleModal("edit");
+        // alert("Editing vehicle: " + id);
       };
 
       $scope.deleteVehicle = function (id) {
@@ -513,17 +587,36 @@ app.controller("adminController", [
           });
       };
 
+      $scope.setProfile=()=>{
+        $scope.customer = loginService.getCustomer();
+      }
       // Profile functions
       $scope.updateProfile = function () {
-        if (
-          $scope.adminProfile.newPassword &&
-          $scope.adminProfile.newPassword !==
-            $scope.adminProfile.confirmPassword
-        ) {
-          alert("Passwords do not match!");
-          return;
+        if($scope.customer.password===undefined){
+          $scope.customer.password="";
         }
-        alert("Profile updated successfully!");
+        if($scope.customer.confirmPassword===undefined){
+          $scope.customer.confirmPassword="";
+        }
+        if($scope.customer.password!==$scope.customer.confirmPassword){
+          alert("Password don't match");
+          console.log($scope.customer.password);
+          console.log($scope.customer.confirmPassword);
+        }else{
+          delete $scope.customer.confirmPassword;
+          delete $scope.customer.id;
+          // $scope.customer.id=Number($scope.customer.id);
+          console.log($scope.customer);
+          customerService.updateCustomer($scope.customer)
+          .then((response)=>{
+            alert("Details Updated Successfully");
+            loginService.setCustomer(response,loginService.getRole());
+          }).catch((error)=>{
+            console.log(error);
+            alert("Error Occured. Please Check Log");
+          })
+        }
+        
       };
 
       // Logout

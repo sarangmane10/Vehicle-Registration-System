@@ -112,6 +112,24 @@ public class CustomerServiceImpl implements CustomerService {
         
         return customerStats;
     }
+    
+
+	@Override
+	public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+		// TODO Auto-generated method stub
+		Customer c=customerRepository.findByEmail(customerDTO.getEmail()).get();
+		c.setFirstName(customerDTO.getFirstName());
+	    c.setMiddleName(customerDTO.getMiddleName());
+	    c.setLastName(customerDTO.getLastName());
+	    c.setEmail(customerDTO.getEmail());
+	    c.setPhoneNumber(customerDTO.getPhoneNumber());
+	    c.setAddress(customerDTO.getAddress());
+	    c.setCity(customerDTO.getCity());
+	    c.setState(customerDTO.getState());
+	    c.setPinCode(customerDTO.getPinCode());
+	    return mapToDTO(customerRepository.save(c));
+		
+	}
 
     private CustomerDTO mapToDTO(Customer c) {
     	List<Long>regId=new ArrayList<>();

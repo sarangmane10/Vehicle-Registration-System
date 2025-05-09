@@ -2,6 +2,7 @@ package com.projects.vehicle.registration.dto;
 
 import java.util.List;
 
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -34,6 +35,10 @@ public class VehicleDTO {
     private List<Long> registrationId; // To represent related registration, instead of embedding full Registration object
     private String engineType;
     private String transmission;
+    @Lob
+    private String image;
+    private Long price;
+    private String status;
     
     
     public VehicleDTO() {
@@ -46,7 +51,7 @@ public class VehicleDTO {
 			List<String> colors, @NotNull int yearOfManufacture, float power, float mileage,
 			@NotNull @Size(max = 20) String fuelType, @NotNull @Size(max = 20) String vehicleType,
 			List<Long> registrationId,String engineType,
-			String transmission) {
+			String transmission,String image,Long price,String status) {
 		super();
 		this.id = id;
 //		this.vehicleNumber = vehicleNumber;
@@ -62,6 +67,9 @@ public class VehicleDTO {
 //		this.image=image;
 		this.engineType=engineType;
 		this.transmission=transmission;
+		this.image=image;
+		this.price=price;
+		this.status=status;
 	}
 
     // Getters and Setters
@@ -181,8 +189,37 @@ public class VehicleDTO {
 		this.transmission = transmission;
 	}
     
+	
+    public String getImage() {
+		return image;
+	}
 
-    @Override
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public Long getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	@Override
     public String toString() {
         return "VehicleDTO [id=" + id + ", vehicleNumber="  + ", model=" + model + ", brand=" + brand
                 + ", color=" + colors + ", yearOfManufacture=" + yearOfManufacture + ", power=" + power + ", mileage="
