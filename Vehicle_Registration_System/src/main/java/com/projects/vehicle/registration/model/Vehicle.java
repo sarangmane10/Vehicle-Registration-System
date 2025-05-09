@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -35,6 +36,7 @@ public class Vehicle {
     private String vehicleType; // e.g., Car, Bike, Truck
     private String engineType;
     private String transmission;
+    @Lob
     private String image;
     private Long price;
     private String status;
