@@ -2,12 +2,13 @@ FROM eclipse-temurin:17-jdk-jammy as build
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml first
+# Copy Maven wrapper and set execute permissions
 COPY mvnw .
 COPY .mvn/ .mvn/
-COPY pom.xml .
+RUN chmod +x mvnw  # <-- THIS FIXES THE PERMISSION ISSUE
 
-# Download dependencies first (creates a cache layer)
+# Copy pom.xml and download dependencies
+COPY pom.xml .
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code and build
