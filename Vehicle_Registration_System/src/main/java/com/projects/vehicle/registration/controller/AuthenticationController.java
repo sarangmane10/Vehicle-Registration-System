@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,5 +76,17 @@ public class AuthenticationController {
             response.put("message", "Login failed");
             return ResponseEntity.internalServerError().body(response);
         }
+    }
+    
+    @PostMapping("/resetPassword")
+    public ResponseEntity<Map<String,Object>> resetPassword(@RequestBody Map<String,String> data){
+    	User user=userRepository.findByEmail(data.get("email")).get();
+    	user.setPassword(passwordEncoder.encode(data.get("password")));
+    	User u=userRepository.save(user);
+    	if(u!=null)
+    		return ResponseEntity.ok(Map.of("status","success"));
+    	else
+    		return ResponseEntity.ok(Map.of("status","error"));
+    	
     }
 }

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 
 @Entity
@@ -21,6 +24,7 @@ public class Customer {
     private String middleName;
     private String lastName;
 
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
     private String address;
@@ -30,6 +34,16 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Registration> registrations = new ArrayList<>();
+    
+//    @OneToOne
+//    @JoinColumn(name = "email", referencedColumnName = "email", unique = true)
+//    private User user;
+    @OneToOne
+    @JoinColumn(name = "email", referencedColumnName = "email", 
+               insertable = false, updatable = false)
+    private User user;
+    
+    
 
 	public Customer() {
 		super();

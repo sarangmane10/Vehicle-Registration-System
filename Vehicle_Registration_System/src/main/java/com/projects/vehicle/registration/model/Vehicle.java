@@ -79,13 +79,6 @@ public class Vehicle {
 		this.id = id;
 	}
 
-//	public String getVehicleNumber() {
-//		return vehicleNumber;
-//	}
-//
-//	public void setVehicleNumber(String vehicleNumber) {
-//		this.vehicleNumber = vehicleNumber;
-//	}
 
 	public String getModel() {
 		return model;
